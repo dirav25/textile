@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S S Textile — Professional Billing (Offline)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <div class="logo">SST</div>
+      <div class="brand-text">
+        <h1>S S Textile</h1>
+        <p>Professional GST Billing & Invoice Management</p>
+      </div>
+    </div>
+    <div class="toolbar noprint">
+      <button class="btn btn-primary" id="newInvoiceBtn">+ New Invoice</button>
+      <label class="btn btn-secondary" title="Import backup">
+        📥 Import
+        <input id="importFile" type="file" accept="application/json" style="display:none">
+      </label>
+      <button class="btn btn-secondary" id="exportBtn" title="Export backup">💾 Backup</button>
+      <button class="btn btn-secondary" id="helpBtn" title="Help">❓ Help</button>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="grid">
+    <!-- Sidebar -->
+    <aside class="card sidebar">
+      <!-- Business Info -->
+      <div class="section business-info">
+        <h3>Business Details</h3>
+        <div class="info-item">
+          <span class="info-label">Business:</span>
+          <span class="info-value">S S TEXTILE</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">GSTIN:</span>
+          <span class="info-value">27ABCDE1234F1Z5</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Mobile:</span>
+          <span class="info-value">+91 98765 43210</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Address:</span>
+          <span class="info-value">Textile Market, Pune, Maharashtra</span>
+        </div>
+        <div class="divider"></div>
+        <div class="info-item">
+          <span class="info-label">Bank:</span>
+          <span class="info-value">State Bank of India</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Account:</span>
+          <span class="info-value">1234567890123456</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">IFSC:</span>
+          <span class="info-value">SBIN0001234</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">UPI:</span>
+          <span class="info-value">sstextile@upi</span>
+        </div>
+      </div>
+
+      <!-- Statistics -->
+      <div class="section">
+        <h3 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 700; color: var(--primary);">Statistics</h3>
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-label">Total Customers</div>
+            <div class="stat-value" id="countCustomers">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Invoices</div>
+            <div class="stat-value" id="countInvoices">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Last Invoice</div>
+            <div class="stat-value" id="lastInv" style="font-size: 14px;">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Management -->
+      <div class="section noprint">
+        <h3 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 700; color: var(--primary);">Add Customer</h3>
+        <div class="form-group">
+          <label>Customer Name</label>
+          <input id="custName" placeholder="Enter customer name" type="text">
+        </div>
+        <div class="form-group">
+          <label>Mobile</label>
+          <input id="custMobile" placeholder="Phone number" type="tel">
+        </div>
+        <div class="form-group">
+          <label>GSTIN (Optional)</label>
+          <input id="custGst" placeholder="GSTIN">
+        </div>
+        <div class="form-group">
+          <label>Address</label>
+          <textarea id="custAddr" placeholder="Customer address" rows="2"></textarea>
+        </div>
+        <div class="input-row" style="margin-top: 12px;">
+          <button class="btn btn-primary" id="saveCustomerBtn" style="flex: 1;">Save Customer</button>
+          <button class="btn btn-secondary" id="clearCustomerBtn" style="flex: 1;">Clear</button>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="section">
+        <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 700; color: var(--primary);">ℹ️ About</h3>
+        <p style="margin: 0; font-size: 12px; line-height: 1.6; color: var(--text-muted);">
+          Offline-first billing app. All data stored in browser. Use Backup/Import to manage data securely.
+        </p>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Invoice Creation Card -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2>Create / Edit Invoice</h2>
+            <p>5% GST (2.5% CGST + 2.5% SGST) applied automatically</p>
+          </div>
+          <div class="noprint" style="display: flex; gap: 10px; align-items: center;">
+            <input id="searchInvoices" class="form-group" placeholder="🔍 Search..." style="margin: 0; width: 200px;">
+            <select id="filterMonth" class="form-group" style="margin: 0; width: 140px;">
+              <option value="">📅 All months</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Invoice Details Form -->
+        <div class="noprint">
+          <div class="input-row">
+            <div class="form-group" style="flex: 0 0 200px;">
+              <label>Invoice Number</label>
+              <input id="invNo" placeholder="Auto-generated">
+            </div>
+            <div class="form-group" style="flex: 0 0 160px;">
+              <label>Invoice Date</label>
+              <input id="invDate" type="date">
+            </div>
+            <div class="form-group">
+              <label>Customer</label>
+              <select id="custSelect">
+                <option value="">-- Select Customer --</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex: 0 0 140px;">
+              <label>Mobile</label>
+              <input id="custMobileSelect" placeholder="Auto-fill" readonly>
+            </div>
+          </div>
+
+          <!-- Items Section -->
+          <div style="margin-top: 16px;">
+            <h3 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 600; color: var(--text-dark);">Add Items</h3>
+            <div class="input-row">
+              <div class="form-group">
+                <label>Item Description</label>
+                <input id="itemName" placeholder="e.g., Cotton Saree, Fabric Meter...">
+              </div>
+              <div class="form-group" style="flex: 0 0 120px;">
+                <label>Quantity</label>
+                <input id="itemQty" type="number" min="0" placeholder="Qty">
+              </div>
+              <div class="form-group" style="flex: 0 0 140px;">
+                <label>Rate (₹)</label>
+                <input id="itemRate" type="number" min="0" placeholder="Rate">
+              </div>
+              <div style="display: flex; gap: 10px; align-items: flex-end; flex: 0 0 auto;">
+                <button class="btn btn-primary" id="addItemBtn">Add</button>
+                <button class="btn btn-secondary" id="clearItemsBtn">Clear All</button>
+              </div>
+            </div>
+            <div style="margin-top: 8px; padding: 8px 12px; background: #dbeafe; border-radius: 6px; font-size: 12px; color: var(--primary);">
+              💡 Add items with quantity and rate, then save the invoice.
+            </div>
+          </div>
+
+          <!-- Items Table -->
+          <div style="margin-top: 16px;">
+            <div class="table-wrapper">
+              <table id="itemsTable">
+                <thead>
+                  <tr>
+                    <th>Item Description</th>
+                    <th style="width: 80px;">Quantity</th>
+                    <th style="width: 100px;">Rate (₹)</th>
+                    <th style="width: 120px;">Amount (₹)</th>
+                    <th style="width: 80px;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <!-- Invoice Summary -->
+            <div class="invoice-summary">
+              <div class="summary-row">
+                <span>Subtotal</span>
+                <span class="currency" id="subtotalCell">₹0.00</span>
+              </div>
+              <div class="summary-row">
+                <span>CGST (2.5%)</span>
+                <span class="currency" id="cgstCell">₹0.00</span>
+              </div>
+              <div class="summary-row">
+                <span>SGST (2.5%)</span>
+                <span class="currency" id="sgstCell">₹0.00</span>
+              </div>
+              <div class="summary-row total">
+                <span>Grand Total</span>
+                <span id="grandTotalCell">₹0.00</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px;">
+            <button class="btn btn-primary" id="saveInvoiceBtn">✓ Save Invoice</button>
+            <button class="btn btn-secondary" id="printPreviewBtn">🖨️ Print Preview</button>
+            <button class="btn btn-secondary" id="clearFormBtn">↻ Reset Form</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoice History Card -->
+      <div class="card" style="margin-top: 24px;">
+        <div class="card-header">
+          <h2>Invoice History</h2>
+          <p>Manage your invoices</p>
+        </div>
+
+        <div class="table-wrapper">
+          <table id="historyTable">
+            <thead>
+              <tr>
+                <th>Invoice No.</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Amount (₹)</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div style="margin-top: 16px; padding: 12px; background: var(--bg-light); border-radius: 8px; font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center;">
+          <span>📊 Use Backup to export and Import to restore your data safely.</span>
+        </div>
+      </div>
+
+      <!-- Print Area (Hidden) -->
+      <div id="printArea" class="print-invoice"></div>
+    </main>
+  </div>
+</div>
+
+<!-- WhatsApp Modal -->
+<div id="whatsappModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>📱 Send via WhatsApp</h2>
+      <button class="modal-close" onclick="closeWhatsappModal()">✕</button>
+    </div>
+    <div style="margin-bottom: 16px;">
+      <div class="form-group">
+        <label>Customer Mobile (with country code)</label>
+        <input id="whatsappPhone" placeholder="91XXXXXXXXXX" type="text">
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea id="whatsappMessage" placeholder="Add a custom message..." rows="3" style="resize: vertical;"></textarea>
+      </div>
+      <div class="alert alert-info" style="margin-bottom: 12px;">
+        ℹ️ Make sure the customer has WhatsApp installed. You'll be redirected to WhatsApp Web or App.
+      </div>
+    </div>
+    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+      <button class="btn btn-secondary" onclick="closeWhatsappModal()">Cancel</button>
+      <button class="btn btn-whatsapp" id="sendWhatsappBtn">📤 Send Message</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
