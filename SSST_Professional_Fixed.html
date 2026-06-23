@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>S S Textile — Professional GST Billing</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--primary:#1e40af;--primary-dark:#1e3a8a;--primary-light:#3b82f6;--success:#059669;--danger:#dc2626;--whatsapp:#25d366;--muted-light:#e5e7eb;--border:#d1d5db;--bg-light:#f9fafb;--bg-white:#ffffff;--text-dark:#111827;--text-muted:#6b7280;--shadow-sm:0 1px 2px 0 rgba(0,0,0,0.05);--shadow-md:0 4px 6px -1px rgba(0,0,0,0.1);--transition:all 0.3s cubic-bezier(0.4,0,0.2,1)}
+[data-theme="dark"]{--bg-light:#1f2937;--bg-white:#111827;--text-dark:#f9fafb;--text-muted:#9ca3af;--border:#374151;--muted-light:#374151}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#f3f4f6 100%);color:var(--text-dark);transition:var(--transition)}
+[data-theme="dark"] body{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%)}
+.container{max-width:1400px;margin:0 auto;padding:24px 16px}
+.header{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:28px;background:var(--bg-white);padding:20px;border-radius:12px;box-shadow:var(--shadow-sm)}
+.brand{display:flex;align-items:center;gap:16px;flex:1}
+.logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:18px;box-shadow:var(--shadow-md)}
+.brand-text h1{margin:0;font-size:22px;font-weight:700;color:var(--text-dark)}
+.brand-text p{margin:4px 0 0 0;font-size:12px;color:var(--text-muted)}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{padding:10px 16px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:14px;transition:var(--transition);display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--primary);color:white}.btn-primary:hover{background:var(--primary-dark);transform:translateY(-2px)}
+.btn-secondary{background:var(--bg-white);color:var(--text-dark);border:1.5px solid var(--border)}
+.btn-secondary:hover{background:var(--bg-light);border-color:var(--primary);color:var(--primary)}
+.btn-whatsapp{background:var(--whatsapp);color:white}
+.btn-success{background:var(--success);color:white}
+.btn-icon{background:var(--bg-white);border:1px solid var(--border);width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center}
+.grid{display:grid;grid-template-columns:320px 1fr;gap:24px}
+.card{background:var(--bg-white);border-radius:12px;padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--muted-light)}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--bg-light)}
+.card-header h2{margin:0;font-size:18px;font-weight:700;color:var(--text-dark)}
+.business-info h3{margin:0 0 12px 0;font-size:16px;font-weight:700;color:var(--primary)}
+.info-item{display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px}
+.info-label{color:var(--text-muted);font-weight:500}
+.info-value{color:var(--text-dark);font-weight:600;text-align:right;flex:1;margin-left:12px}
+.form-group{margin-bottom:12px}
+.form-group label{display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text-dark)}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg-white);font-size:14px;font-family:inherit;color:var(--text-dark)}
+.input-row{display:flex;gap:10px}.input-row>*{flex:1}
+table{width:100%;border-collapse:collapse;font-size:14px}
+table thead{background:linear-gradient(180deg,var(--primary) 0%,var(--primary-dark) 100%);color:white}
+table th,table td{padding:12px;text-align:left}
+table td{border-bottom:1px solid var(--bg-light);color:var(--text-dark)}
+.text-center{text-align:center}.text-right{text-align:right}
+.currency{color:var(--primary);font-weight:600}
+.invoice-summary{background:var(--bg-light);border-radius:8px;padding:16px;margin-top:16px;border-left:4px solid var(--primary)}
+.summary-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px}
+.summary-row.total{border-top:2px solid var(--border);font-weight:700;font-size:16px;color:var(--primary)}
+.modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5)}
+.modal.active{display:flex;align-items:center;justify-content:center}
+.modal-content{background-color:var(--bg-white);padding:24px;border-radius:12px;max-width:500px;width:90%}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--bg-light)}
+.modal-close{background:none;border:none;font-size:24px;cursor:pointer;color:var(--text-muted)}
+.print-invoice{display:none;background:white;padding:20px;color:#000}
+.invoice-container{max-width:800px;margin:0;font-family:'Poppins',Arial,sans-serif}
+.invoice-header-section{display:flex;justify-content:space-between;margin-bottom:20px;border-bottom:2px solid var(--primary);padding-bottom:16px}
+.invoice-company h1{margin:0;font-size:24px;font-weight:800;color:var(--primary)}
+.invoice-items-table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:12px}
+.invoice-items-table th{background:var(--primary);color:white;padding:10px;border:1px solid var(--primary)}
+.invoice-items-table td{padding:10px;border:1px solid #ddd}
+.invoice-totals table{width:300px;font-size:12px;margin-left:auto}
+.invoice-totals th{text-align:right;padding:8px;border-bottom:1px solid #ddd;font-weight:500}
+.invoice-totals td{padding:8px;border-bottom:1px solid #ddd;text-align:right}
+.total-row{border-bottom:2px solid var(--primary)!important;font-weight:700;color:var(--primary);font-size:14px}
+.amount-words{margin:12px 0;padding:8px;background:#f3f4f6;border-radius:6px;font-size:11px;font-style:italic}
+.qr-code{width:120px;height:120px;margin-top:10px}
+.divider{border:none;border-top:1px solid var(--border);margin:12px 0}
+@media(max-width:1024px){.grid{grid-template-columns:1fr}.input-row{flex-direction:column}}
+
+@page{size:A4;margin:6mm}
+.print-invoice{display:none}
+@media print{
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{background:#fff!important}
+.header,.sidebar,.noprint,#historyTable,.card-header{display:none!important}
+.grid{display:block!important}
+.card{box-shadow:none!important;border:none!important;padding:0!important;margin:0!important}
+#printArea,.print-invoice{display:block!important}
+#printArea>*{page-break-inside:avoid!important;break-inside:avoid!important}
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="brand"><div class="logo">SST</div><div class="brand-text"><h1>S S Textile</h1><p>Professional GST Billing & Invoice Management</p></div></div>
+    <div class="toolbar noprint">
+      <button class="btn btn-secondary" id="themeToggle">🌙 Dark</button>
+      <button class="btn btn-primary" id="newInvoiceBtn">+ New Invoice</button>
+      <label class="btn btn-secondary">📥 Import<input id="importFile" type="file" accept="application/json" style="display:none"></label>
+      <button class="btn btn-secondary" id="exportBtn">💾 Backup</button>
+    </div>
+  </div>
+  <div class="grid">
+    <aside class="card sidebar">
+      <div class="section business-info">
+        <h3>Business Details</h3>
+        <div class="info-item"><span class="info-label">Business:</span><span class="info-value">S S TEXTILE</span></div>
+        <div class="info-item"><span class="info-label">GSTIN:</span><span class="info-value">24BRXPM6996GIZT</span></div>
+        <div class="info-item"><span class="info-label">Mobile:</span><span class="info-value">+91 98765 43210</span></div>
+        <div class="info-item"><span class="info-label">Address:</span><span class="info-value">PLOT NO. 296-2-3B, G.I.D.C. UMBERGAON, TA: UMBERGAON - 396 171, DIST. VALSAD, GUJARAT</span></div>
+        <div class="divider"></div>
+        <div class="info-item"><span class="info-label">Bank:</span><span class="info-value">HDFC Bank</span></div>
+        <div class="info-item"><span class="info-label">Branch:</span><span class="info-value">UMBERGAON</span></div>
+        <div class="info-item"><span class="info-label">A/C No:</span><span class="info-value">50200087857010</span></div>
+        <div class="info-item"><span class="info-label">IFSC:</span><span class="info-value">HDFC000095</span></div>
+        <div class="info-item"><span class="info-label">UPI:</span><span class="info-value">sstextile@hdfc</span></div>
+      </div>
+      <div class="section"><h3 style="margin:0 0 12px 0;font-size:16px;font-weight:700;color:var(--primary)">Statistics</h3>
+        <div style="display:grid;gap:10px">
+          <div style="background:var(--bg-light);padding:12px;border-radius:8px"><div style="font-size:12px;color:var(--text-muted)">Total Customers</div><div style="font-size:20px;font-weight:700;color:var(--primary)" id="countCustomers">0</div></div>
+          <div style="background:var(--bg-light);padding:12px;border-radius:8px"><div style="font-size:12px;color:var(--text-muted)">Total Invoices</div><div style="font-size:20px;font-weight:700;color:var(--primary)" id="countInvoices">0</div></div>
+          <div style="background:var(--bg-light);padding:12px;border-radius:8px"><div style="font-size:12px;color:var(--text-muted)">Last Invoice</div><div style="font-size:14px;font-weight:700;color:var(--primary)" id="lastInv">—</div></div>
+        </div>
+      </div>
+      <div class="section noprint"><h3 style="margin:0 0 12px 0;font-size:16px;font-weight:700;color:var(--primary)">Add Customer</h3>
+        <div class="form-group"><label>Customer Name</label><input id="custName" placeholder="Enter customer name"></div>
+        <div class="form-group"><label>Mobile</label><input id="custMobile" placeholder="Phone number"></div>
+        <div class="form-group"><label>GSTIN</label><input id="custGst" placeholder="GSTIN"></div>
+        <div class="form-group"><label>Address</label><textarea id="custAddr" rows="2"></textarea></div>
+        <div class="input-row"><button class="btn btn-primary" id="saveCustomerBtn" style="flex:1">Save</button><button class="btn btn-secondary" id="clearCustomerBtn" style="flex:1">Clear</button></div>
+      </div>
+      <div class="section noprint"><h3 style="margin:0 0 12px 0;font-size:16px;font-weight:700;color:var(--primary)">Item Master</h3>
+        <div class="form-group"><label>Item Name</label><input id="masterItem" placeholder="e.g., Cotton Fabric"></div>
+        <div class="form-group"><label>Default Rate</label><input id="masterRate" type="number" placeholder="Rate"></div>
+        <button class="btn btn-primary" id="saveItemMaster" style="width:100%">Add to Master</button>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="card">
+        <div class="card-header"><div><h2>Create / Edit Invoice</h2><p>Multi-GST: 5%, 12%, 18%, 28%</p></div>
+          <div class="noprint" style="display:flex;gap:10px"><input id="searchInvoices" placeholder="🔍 Search..."><select id="filterMonth"><option value="">📅 All months</option></select></div>
+        </div>
+        <div class="noprint">
+          <div class="input-row">
+            <div class="form-group" style="flex:0 0 200px"><label>Invoice Number</label><input id="invNo"></div>
+            <div class="form-group" style="flex:0 0 160px"><label>Invoice Date</label><input id="invDate" type="date"></div>
+            <div class="form-group"><label>Customer</label><select id="custSelect"><option value="">-- Select --</option></select></div>
+            <div class="form-group" style="flex:0 0 140px"><label>Mobile</label><input id="custMobileSelect" readonly></div>
+          </div>
+          <div style="margin-top:16px"><h3 style="margin:0 0 12px 0;font-size:14px;font-weight:600">Add Items</h3>
+            <div class="input-row">
+              <div class="form-group"><label>Item</label><select id="itemSelect"><option value="">-- Select from Master --</option></select><input id="itemName" placeholder="Or type manually"></div>
+              <div class="form-group" style="flex:0 0 100px"><label>GST %</label><select id="itemGst"><option value="5">5%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="28">28%</option></select></div>
+              <div class="form-group" style="flex:0 0 120px"><label>Qty</label><input id="itemQty" type="number" min="0"></div>
+              <div class="form-group" style="flex:0 0 140px"><label>Rate (₹)</label><input id="itemRate" type="number" min="0"></div>
+              <div style="display:flex;gap:10px;align-items:flex-end"><button class="btn btn-primary" id="addItemBtn">Add</button><button class="btn btn-secondary" id="clearItemsBtn">Clear</button></div>
+            </div>
+          </div>
+          <div style="margin-top:16px">
+            <table id="itemsTable"><thead><tr><th>Item</th><th style="width:80px">GST%</th><th style="width:80px">Qty</th><th style="width:100px">Rate</th><th style="width:120px">Amount</th><th style="width:80px">Actions</th></tr></thead><tbody></tbody></table>
+            <div class="invoice-summary">
+              <div class="summary-row"><span>Subtotal</span><span class="currency" id="subtotalCell">₹0.00</span></div>
+              <div class="summary-row"><span>CGST</span><span class="currency" id="cgstCell">₹0.00</span></div>
+              <div class="summary-row"><span>SGST</span><span class="currency" id="sgstCell">₹0.00</span></div>
+              <div class="summary-row total"><span>Grand Total</span><span id="grandTotalCell">₹0.00</span></div>
+              <div class="amount-words" id="amountWords">Rupees Zero Only</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px">
+            <button class="btn btn-success" id="saveInvoiceBtn">✓ Save</button>
+            <button class="btn btn-primary" id="downloadPdfBtn">📄 PDF</button>
+            <button class="btn btn-secondary" id="printPreviewBtn">🖨️ Print</button>
+            <button class="btn btn-secondary" id="clearFormBtn">↻ Reset</button>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:24px"><div class="card-header"><h2>Invoice History</h2></div>
+        <table id="historyTable"><thead><tr><th>Invoice No.</th><th>Customer</th><th>Date</th><th>Amount</th><th>Actions</th></tr></thead><tbody></tbody></table>
+      </div>
+      <div id="printArea" class="print-invoice"></div>
+    </main>
+  </div>
+</div>
+<div id="whatsappModal" class="modal"><div class="modal-content"><div class="modal-header"><h2>📱 Send via WhatsApp</h2><button class="modal-close" onclick="closeWhatsappModal()">✕</button></div>
+  <div class="form-group"><label>Mobile 91XXXXXXXXXX</label><input id="whatsappPhone"></div>
+  <div class="form-group"><label>Message</label><textarea id="whatsappMessage" rows="3"></textarea></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn btn-secondary" onclick="closeWhatsappModal()">Cancel</button><button class="btn btn-whatsapp" id="sendWhatsappBtn">📤 Send</button></div>
+</div></div>
+<script>
+const STORAGE_META='sst_meta_v2',STORAGE_CUST='sst_customers_v2',STORAGE_INV='sst_invoices_v2',STORAGE_ITEMS='sst_itemmaster_v1';
+let items=[],editingInvoiceId=null,currentInvoiceForWhatsapp=null;const $=id=>document.getElementById(id),fmt=v=>Number(v).toLocaleString('en-IN',{style:'currency',currency:'INR'});
+function numberToWords(num){if(num===0)return'Rupees Zero Only';const a=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'],b=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];function inWords(n){if(n<20)return a[n];if(n<100)return b[Math.floor(n/10)]+(n%10?' '+a[n%10]:'');if(n<1000)return a[Math.floor(n/100)]+' Hundred'+(n%100?' '+inWords(n%100):'');if(n<100000)return inWords(Math.floor(n/1000))+' Thousand'+(n%1000?' '+inWords(n%1000):'');return inWords(Math.floor(n/100000))+' Lakh'+(n%100000?' '+inWords(n%100000):'') }return'Rupees '+inWords(Math.floor(num))+' Only'}
+function loadJSON(key,def){try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(def))}catch(e){return def}}
+function saveJSON(key,obj){localStorage.setItem(key,JSON.stringify(obj))}
+function initStorage(){let meta=loadJSON(STORAGE_META,{});if(!meta.lastInv)meta.lastInv=0;saveJSON(STORAGE_META,meta);saveJSON(STORAGE_CUST,loadJSON(STORAGE_CUST,[]));saveJSON(STORAGE_INV,loadJSON(STORAGE_INV,[]));saveJSON(STORAGE_ITEMS,loadJSON(STORAGE_ITEMS,[]))}
+function nextInvoiceNumber(persist=true){let meta=loadJSON(STORAGE_META,{});meta.lastInv=(meta.lastInv||0)+1;if(persist)saveJSON(STORAGE_META,meta);return`SST-${String(meta.lastInv).padStart(4,'0')}`}
+$('themeToggle').addEventListener('click',()=>{const theme=document.documentElement.getAttribute('data-theme'),newTheme=theme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',newTheme);$('themeToggle').textContent=newTheme==='dark'?'☀️ Light':'🌙 Dark';localStorage.setItem('theme',newTheme)});if(localStorage.getItem('theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');$('themeToggle').textContent='☀️ Light'}
+function populateItemMaster(){const sel=$('itemSelect');sel.innerHTML='<option value="">-- Select from Master --</option>';const items=loadJSON(STORAGE_ITEMS,[]);items.forEach(it=>{const opt=document.createElement('option');opt.value=it.name;opt.dataset.rate=it.rate;opt.textContent=`${it.name} - ₹${it.rate}`;sel.appendChild(opt)});sel.onchange=()=>{const selected=sel.options[sel.selectedIndex];if(selected&&selected.dataset.rate){$('itemName').value=selected.value;$('itemRate').value=selected.dataset.rate}}}
+$('saveItemMaster').addEventListener('click',()=>{const name=$('masterItem').value.trim(),rate=Number($('masterRate').value||0);if(!name||rate<=0){alert('Enter valid item and rate');return}let items=loadJSON(STORAGE_ITEMS,[]);items.unshift({name,rate});saveJSON(STORAGE_ITEMS,items);$('masterItem').value='';$('masterRate').value='';populateItemMaster();alert('✓ Item added to master')})
+function populateCustomerSelect(){const sel=$('custSelect'),mobile=$('custMobileSelect'),current=sel.value||'';sel.innerHTML='<option value="">-- Select --</option>';const customers=loadJSON(STORAGE_CUST,[]);customers.forEach(c=>{const opt=document.createElement('option');opt.value=c.name;opt.dataset.mobile=c.mobile||'';opt.textContent=`${c.name}${c.mobile?' • '+c.mobile:''}`;sel.appendChild(opt)});sel.value=current;sel.onchange=()=>{const selected=sel.options[sel.selectedIndex];if(selected&&selected.dataset)mobile.value=selected.dataset.mobile||''}}
+$('saveCustomerBtn').addEventListener('click',()=>{const name=$('custName').value.trim();if(!name){alert('Customer name required');return}const mobile=$('custMobile').value.trim(),gstin=$('custGst').value.trim(),addr=$('custAddr').value.trim();let customers=loadJSON(STORAGE_CUST,[]);const idx=customers.findIndex(c=>c.name===name);if(idx>=0)customers[idx]={name,mobile,gstin,address:addr};else customers.unshift({name,mobile,gstin,address:addr});saveJSON(STORAGE_CUST,customers);$('custName').value='';$('custMobile').value='';$('custGst').value='';$('custAddr').value='';populateCustomerSelect();refreshCounts();alert('✓ Customer saved')})
+$('clearCustomerBtn').addEventListener('click',()=>{$('custName').value='';$('custMobile').value='';$('custGst').value='';$('custAddr').value=''})
+function renderItems(){const tbody=document.querySelector('#itemsTable tbody');tbody.innerHTML='';let subtotal=0,totalCgst=0,totalSgst=0;items.forEach((it,idx)=>{const amt=Number(it.qty||0)*Number(it.rate||0),gstAmt=amt*(Number(it.gst)/100),cgst=gstAmt/2,sgst=gstAmt/2;subtotal+=amt;totalCgst+=cgst;totalSgst+=sgst;const tr=document.createElement('tr');tr.innerHTML=`<td>${escapeHtml(it.name)}</td><td class="text-center">${it.gst}%</td><td class="text-center">${it.qty}</td><td class="text-right">${fmt(it.rate)}</td><td class="text-right"><strong>${fmt(amt)}</strong></td><td class="text-center"><button class="btn-icon" onclick="editItem(${idx})">✎</button><button class="btn-icon" onclick="removeItem(${idx})">✕</button></td>`;tbody.appendChild(tr)});const grand=round2(subtotal+totalCgst+totalSgst);$('subtotalCell').innerText=fmt(subtotal);$('cgstCell').innerText=fmt(totalCgst);$('sgstCell').innerText=fmt(totalSgst);$('grandTotalCell').innerText=fmt(grand);$('amountWords').innerText=numberToWords(grand);return{subtotal,cgst:totalCgst,sgst:totalSgst,grand}}
+function round2(v){return Math.round((v+Number.EPSILON)*100)/100}
+$('addItemBtn').addEventListener('click',()=>{const name=$('itemName').value.trim(),qty=Number($('itemQty').value||0),rate=Number($('itemRate').value||0),gst=Number($('itemGst').value||18);if(!name){alert('Enter item description');return}if(qty<=0){alert('Quantity must be > 0');return}items.push({name,qty,rate,gst});$('itemName').value='';$('itemQty').value='';$('itemRate').value='';renderItems()})
+function editItem(idx){const it=items[idx];$('itemName').value=it.name;$('itemQty').value=it.qty;$('itemRate').value=it.rate;$('itemGst').value=it.gst;items.splice(idx,1);renderItems()}
+function removeItem(idx){if(!confirm('Remove this item?'))return;items.splice(idx,1);renderItems()}
+$('clearItemsBtn').addEventListener('click',()=>{if(!confirm('Clear all items?'))return;items=[];renderItems()})
+$('saveInvoiceBtn').addEventListener('click',()=>{const invNoField=$('invNo');let invNo=invNoField.value.trim();const invDate=$('invDate').value||new Date().toISOString().slice(0,10),customer=$('custSelect').value.trim()||'Walk-in',custMobile=$('custMobileSelect').value.trim()||'';if(items.length===0){alert('Add at least one item');return}if(!invNo)invNo=nextInvoiceNumber(true);const totals=renderItems();let invoices=loadJSON(STORAGE_INV,[]);const invoiceData={id:editingInvoiceId||'inv_'+Date.now(),inv:invNo,date:invDate,customer,customerMobile:custMobile,items:items.slice(),subtotal:totals.subtotal,cgst:totals.cgst,sgst:totals.sgst,total:totals.grand,createdAt:new Date().toISOString()};if(editingInvoiceId){const idx=invoices.findIndex(i=>i.id===editingInvoiceId);invoices[idx]=invoiceData;alert('✓ Invoice updated');editingInvoiceId=null}else{invoices.unshift(invoiceData);alert('✓ Invoice saved')}saveJSON(STORAGE_INV,invoices);invNoField.value=nextInvoiceNumber(true);$('invDate').value=new Date().toISOString().slice(0,10);items=[];renderItems();refreshHistory();refreshCounts()})
+function editInvoice(id){const invoices=loadJSON(STORAGE_INV,[]),inv=invoices.find(i=>i.id===id);if(!inv)return alert('Invoice not found');editingInvoiceId=id;$('invNo').value=inv.inv;$('invDate').value=inv.date;$('custSelect').value=inv.customer;$('custMobileSelect').value=inv.customerMobile||'';items=inv.items.map(it=>({...it}));renderItems();window.scrollTo({top:0,behavior:'smooth'})}
+function deleteInvoice(id){if(!confirm('Delete this invoice?'))return;let invoices=loadJSON(STORAGE_INV,[]);invoices=invoices.filter(i=>i.id!==id);saveJSON(STORAGE_INV,invoices);refreshHistory();refreshCounts()}
+function openWhatsappModal(invId){const invoices=loadJSON(STORAGE_INV,[]),inv=invoices.find(i=>i.id===invId);if(!inv)return alert('Invoice not found');currentInvoiceForWhatsapp=inv;$('whatsappPhone').value=inv.customerMobile?inv.customerMobile.replace(/\D/g,''):'';const itemsList=inv.items.map(it=>`${it.name} - Qty:${it.qty} @₹${it.rate}`).join('\n');const defaultMsg=`Hello ${inv.customer},\n\nInvoice: ${inv.inv}\nDate: ${inv.date}\n\nItems:\n${itemsList}\n\nSubtotal: ₹${inv.subtotal.toFixed(2)}\nGST: ₹${(inv.cgst+inv.sgst).toFixed(2)}\nTotal: ₹${inv.total.toFixed(2)}\n\nThank you!`;$('whatsappMessage').value=defaultMsg;$('whatsappModal').classList.add('active')}
+function closeWhatsappModal(){$('whatsappModal').classList.remove('active');currentInvoiceForWhatsapp=null}
+$('sendWhatsappBtn').addEventListener('click',()=>{const phone=$('whatsappPhone').value.trim().replace(/\D/g,''),message=$('whatsappMessage').value.trim();if(!phone||phone.length<10){alert('Enter valid phone');return}window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`,'_blank');closeWhatsappModal()})
+function refreshHistory(filterText=''){const tbody=document.querySelector('#historyTable tbody');tbody.innerHTML='';const invoices=loadJSON(STORAGE_INV,[]);const f=(filterText||'').toLowerCase().trim();const filtered=invoices.filter(inv=>!f||(inv.inv||'').toLowerCase().includes(f)||(inv.customer||'').toLowerCase().includes(f));filtered.forEach(inv=>{const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${inv.inv}</strong></td><td>${escapeHtml(inv.customer||'Walk-in')}</td><td>${inv.date}</td><td class="text-right"><strong>${fmt(inv.total)}</strong></td><td class="text-center noprint"><button class="btn-icon" onclick="printInvoice('${inv.id}')">🖨️</button><button class="btn-icon" onclick="openWhatsappModal('${inv.id}')">💬</button><button class="btn-icon" onclick="editInvoice('${inv.id}')">✎</button><button class="btn-icon" onclick="deleteInvoice('${inv.id}')">✕</button></td>`;tbody.appendChild(tr)})}
+function printInvoice(id){const invoices=loadJSON(STORAGE_INV,[]),inv=invoices.find(i=>i.id===id);if(!inv)return alert('Invoice not found');$('printArea').innerHTML=buildInvoiceHTML(inv);setTimeout(()=>window.print(),200)}
+function buildInvoiceHTML(inv){const company={name:'S S TEXTILE',gst:'24BRXPM6996GIZT',addr:'PLOT NO. 296-2-3B, G.I.D.C. UMBERGAON, TA: UMBERGAON - 396 171, DIST. VALSAD, GUJARAT',mobile:'+91 98765 43210',bank:'HDFC Bank',branch:'UMBERGAON',ac:'50200087857010',ifsc:'HDFC000095',upi:'sstextile@hdfc'};const itemsHtml=inv.items.map(it=>`<tr><td>${escapeHtml(it.name)}</td><td class="text-center">${it.qty}</td><td class="text-right">${fmt(it.rate)}</td><td class="text-right">${fmt(it.qty*it.rate)}</td></tr>`).join('');const qrUrl=`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=upi://pay?pa=${company.upi}&pn=S%20S%20Textile&am=${inv.total}`;return`<div class="invoice-container"><div class="invoice-header-section"><div class="invoice-company"><h1>${company.name}</h1><p>${company.addr}</p><p>Mobile: ${company.mobile}</p><p>GSTIN: ${company.gst}</p></div><div style="text-align:right"><div style="font-size:18px;font-weight:800;color:var(--primary)">TAX INVOICE</div><div style="font-size:11px;color:#666;text-transform:uppercase;font-weight:600;margin-top:8px">Invoice Number</div><div style="font-size:14px;font-weight:700">${inv.inv}</div><div style="font-size:11px;color:#666;text-transform:uppercase;font-weight:600;margin-top:8px">Invoice Date</div><div style="font-size:14px;font-weight:700">${inv.date}</div></div></div><div style="display:flex;gap:40px;margin-bottom:20px"><div style="flex"><div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--primary);margin-bottom:8px">Bill To</div><p style="margin:4px 0;font-size:12px;line-height:1.6">${escapeHtml(inv.customer||'Walk-in')}</p><p style="margin:4px 0;font-size:12px">${escapeHtml(inv.customerMobile||'')}</p></div><div style="flex:1"><div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--primary);margin-bottom:8px">Payment Details</div><p style="margin:4px 0;font-size:12px"><strong>Bank:</strong> ${company.bank}</p><p style="margin:4px 0;font-size:12px"><strong>Branch:</strong> ${company.branch}</p><p style="margin:4px 0;font-size:12px"><strong>A/C:</strong> ${company.ac}</p><p style="margin:4px 0;font-size:12px"><strong>IFSC:</strong> ${company.ifsc}</p><p style="margin:4px 0;font-size:12px"><strong>UPI:</strong> ${company.upi}</p><img src="${qrUrl}" class="qr-code" alt="UPI QR"></div></div><table class="invoice-items-table"><thead><tr><th>Item & Description</th><th style="width:80px" class="text-center">Qty</th><th style="width:100px" class="text-right">Rate (₹)</th><th style="width:120px" class="text-right">Amount (₹)</th></tr></thead><tbody>${itemsHtml}</tbody></table><div class="invoice-totals"><table><tr><th>Subtotal</th><td>${fmt(inv.subtotal)}</td></tr><tr><th>CGST</th><td>${fmt(inv.cgst)}</td></tr><tr><th>SGST</th><td>${fmt(inv.sgst)}</td></tr><tr class="total-row"><th>Grand Total</th><td>${fmt(inv.total)}</td></tr></table></div><div class="amount-words">Amount in Words: ${numberToWords(inv.total)}</div><div style="background:#f3f4f6;padding:12px;border-radius:6px;font-size:11px;color:#666;margin-bottom:16px"><strong>Terms & Conditions:</strong> Goods once sold will not be taken back. Subject to Umbergaon jurisdiction. This is a computer-generated invoice.</div><div class="invoice-footer"><div class="signature-block" style="text-align:left"><h4 style="margin:40px 0 8px 0;font-size:12px;font-weight:700">Prepared By</h4><p style="margin:0;font-size:11px;color:#666">Authorized Officer</p></div><div class="signature-block" style="text-align:right"><h4 style="margin:40px 0 8px 0;font-size:12px;font-weight:700">For ${company.name}</h4><p style="margin-top:30px;font-size:11px;color:#666">Authorized Signatory</p></div></div></div>`}
+function escapeHtml(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+// New Invoice
+$('newInvoiceBtn').addEventListener('click',()=>{editingInvoiceId=null;items=[];renderItems();$('invNo').value=nextInvoiceNumber(true);$('invDate').value=new Date().toISOString().slice(0,10);$('custSelect').value='';$('custMobileSelect').value='';window.scrollTo({top:0,behavior:'smooth'})})
+
+// Export/Import
+$('exportBtn').addEventListener('click',()=>{const meta=loadJSON(STORAGE_META,{}),customers=loadJSON(STORAGE_CUST,[]),invoices=loadJSON(STORAGE_INV,[]),payload={exportedAt:new Date().toISOString(),meta,customers,invoices};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`sst_backup_${new Date().toISOString().slice(0,10)}.json`;a.click()})
+$('importFile').addEventListener('change',(e)=>{const f=e.target.files[0];if(!f)return;const reader=new FileReader();reader.onload=function(ev){try{const j=JSON.parse(ev.target.result);if(!confirm('Import will overwrite local data. Continue?'))return;if(j.meta)saveJSON(STORAGE_META,j.meta);if(j.customers)saveJSON(STORAGE_CUST,j.customers);if(j.invoices)saveJSON(STORAGE_INV,j.invoices);initStorage();populateCustomerSelect();populateItemMaster();refreshHistory();refreshCounts();alert('✓ Import complete')}catch(err){alert('Invalid JSON file')}};reader.readAsText(f);e.target.value=''})
+
+// Search
+$('searchInvoices').addEventListener('input',(e)=>{refreshHistory(e.target.value)})
+
+// Month filter
+function populateMonthFilter(){const sel=$('filterMonth');sel.innerHTML='<option value="">📅 All months</option>';const invoices=loadJSON(STORAGE_INV,[]);const months=new Set();invoices.forEach(inv=>{if(!inv.date)return;const m=inv.date.slice(0,7);months.add(m)});Array.from(months).sort().reverse().forEach(m=>{const opt=document.createElement('option');opt.value=m;opt.textContent=m;sel.appendChild(opt)})}
+$('filterMonth').addEventListener('change',(e)=>{const v=e.target.value;if(!v)return refreshHistory($('searchInvoices').value);const invoices=loadJSON(STORAGE_INV,[]);const filtered=invoices.filter(inv=>(inv.date||'').startsWith(v));const tbody=document.querySelector('#historyTable tbody');tbody.innerHTML='';filtered.forEach(inv=>{const tr=document.createElement('tr');tr.innerHTML=`<td><strong>${inv.inv}</strong></td><td>${escapeHtml(inv.customer||'Walk-in')}</td><td>${inv.date}</td><td class="text-right"><strong>${fmt(inv.total)}</strong></td><td class="text-center noprint"><button class="btn-icon" onclick="printInvoice('${inv.id}')">🖨️</button><button class="btn-icon" onclick="openWhatsappModal('${inv.id}')">💬</button><button class="btn-icon" onclick="editInvoice('${inv.id}')">✎</button><button class="btn-icon" onclick="deleteInvoice('${inv.id}')">✕</button></td>`;tbody.appendChild(tr)})})
+
+// PDF Download
+$('downloadPdfBtn').addEventListener('click',async()=>{if(items.length===0){if(!confirm('No items added. Continue?'))return}const tempInv={id:'preview_'+Date.now(),inv:$('invNo').value||nextInvoiceNumber(false),date:$('invDate').value||new Date().toISOString().slice(0,10),customer:$('custSelect').value||'Walk-in',customerMobile:$('custMobileSelect').value||'',items:items.slice(),subtotal:renderItems().subtotal,cgst:renderItems().cgst,sgst:renderItems().sgst,total:renderItems().grand};$('printArea').innerHTML=buildInvoiceHTML(tempInv);setTimeout(async()=>{const element=$('printArea');const canvas=await html2canvas(element,{scale:2});const imgData=canvas.toDataURL('image/png');const pdf=new jspdf.jsPDF('p','mm','a4');const pdfWidth=pdf.internal.pageSize.getWidth();const pdfHeight=(canvas.height*pdfWidth)/canvas.width;pdf.addImage(imgData,'PNG',0,0,pdfWidth,pdfHeight);pdf.save(`${tempInv.inv}.pdf`);},300)})
+
+// Print preview
+$('printPreviewBtn').addEventListener('click',()=>{if(items.length===0){if(!confirm('No items added. Continue?'))return}const tempInv={id:'preview_'+Date.now(),inv:$('invNo').value||nextInvoiceNumber(false),date:$('invDate').value||new Date().toISOString().slice(0,10),customer:$('custSelect').value||'Walk-in',customerMobile:$('custMobileSelect').value||'',items:items.slice(),subtotal:renderItems().subtotal,cgst:renderItems().cgst,sgst:renderItems().sgst,total:renderItems().grand};$('printArea').innerHTML=buildInvoiceHTML(tempInv);setTimeout(()=>window.print(),200)})
+
+// Clear form
+$('clearFormBtn').addEventListener('click',()=>{if(items.length>0&&!confirm('Clear form and lose unsaved items?'))return;editingInvoiceId=null;$('invNo').value=nextInvoiceNumber(true);$('invDate').value=new Date().toISOString().slice(0,10);$('custSelect').value='';$('custMobileSelect').value='';$('itemName').value='';$('itemQty').value='';$('itemRate').value='';items=[];renderItems()})
+
+// Startup
+function startup(){initStorage();populateCustomerSelect();populateItemMaster();if(!$('invNo').value)$('invNo').value=nextInvoiceNumber(true);if(!$('invDate').value)$('invDate').value=new Date().toISOString().slice(0,10);renderItems();refreshHistory();refreshCounts();populateMonthFilter()}
+startup()
+
+// Global functions
+window.editInvoice=editInvoice;window.printInvoice=printInvoice;window.deleteInvoice=deleteInvoice;window.editItem=editItem;window.removeItem=removeItem;window.openWhatsappModal=openWhatsappModal;window.closeWhatsappModal=closeWhatsappModal
+
+// Close modal on outside click
+window.addEventListener('click',(e)=>{const modal=$('whatsappModal');if(e.target===modal){closeWhatsappModal()}})
+
+// Warn on unsaved items
+window.addEventListener('beforeunload',function(e){if(items.length>0){e.preventDefault();e.returnValue=''}})
+</script>
+</body>
+</html>
